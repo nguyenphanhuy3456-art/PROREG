@@ -1,0 +1,2 @@
+-keep class com.proreg.** { *; }
+-keepclasseswithmembernames class * { native <methods>; }
