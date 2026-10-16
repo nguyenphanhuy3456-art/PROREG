@@ -20,21 +20,32 @@ jobs:
         distribution: 'zulu'
 
     - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
+      run: |
+        mkdir -p $HOME/android-sdk/cmdline-tools
+        cd $HOME/android-sdk/cmdline-tools
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+        unzip -q commandlinetools-linux-11076708_latest.zip
+        mv cmdline-tools latest
+        echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
+        echo "$HOME/android-sdk/platform-tools" >> $GITHUB_PATH
 
-    - name: Install NDK r25b
+    - name: Accept licenses + install packages
       run: |
         yes | sdkmanager --licenses > /dev/null 2>&1 || true
-        sdkmanager "ndk;25.1.8937393"
+        sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;25.1.8937393"
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x ./gradlew
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
 
     - name: Build Debug APK
-      run: ./gradlew assembleDebug --stacktrace --no-daemon
+      run: |
+        echo "sdk.dir=$ANDROID_HOME" > local.properties
+        gradle assembleDebug --stacktrace --no-daemon
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: PROREG-debug-apk
         path: app/build/outputs/apk/debug/*.apk
+        if-no-files-found: warn
