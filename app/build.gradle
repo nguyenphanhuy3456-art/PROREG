@@ -3,8 +3,7 @@ plugins { id 'com.android.application' }
 android {
     namespace 'com.proreg'
     compileSdk 34
-    ndkVersion "25.1.8937393"
-
+ndkVersion "21.4.7075529"
     defaultConfig {
         applicationId "com.proreg"
         minSdk 26

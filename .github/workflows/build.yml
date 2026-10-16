@@ -33,8 +33,7 @@ jobs:
     - name: Accept licenses + install packages
       run: |
         yes | sdkmanager --licenses > /dev/null 2>&1 || true
-        sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;25.1.8937393"
-
+sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;21.4.7075529"
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
 
