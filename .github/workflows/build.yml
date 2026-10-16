@@ -35,10 +35,11 @@ jobs:
         yes | sdkmanager --licenses > /dev/null 2>&1 || true
         sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;21.4.7075529"
 
-       - name: Setup Gradle 8.7
-  uses: gradle/actions/setup-gradle@v3
-  with:
-    gradle-version: 8.7
+    - name: Setup Gradle 8.7
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-version: '8.7'
+
     - name: Build Debug APK
       run: |
         echo "sdk.dir=$ANDROID_HOME" > local.properties
