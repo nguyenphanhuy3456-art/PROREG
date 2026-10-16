@@ -35,13 +35,13 @@ jobs:
         yes | sdkmanager --licenses > /dev/null 2>&1 || true
         sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;25.1.8937393"
 
-    - name: Grant execute permission
-      run: chmod +x ./gradlew || true
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
 
     - name: Build Debug APK
       run: |
         echo "sdk.dir=$ANDROID_HOME" > local.properties
-        ./gradlew assembleDebug --stacktrace --no-daemon
+        gradle assembleDebug --stacktrace --no-daemon
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
