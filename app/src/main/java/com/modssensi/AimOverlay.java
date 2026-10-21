@@ -1,4 +1,4 @@
-package com.proxydhuy;
+package com.modssensi;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -14,7 +14,7 @@ public class AimOverlay extends View {
         super(c);
         circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         circlePaint.setStyle(Paint.Style.STROKE);
-        circlePaint.setStrokeWidth(5f);
+        circlePaint.setStrokeWidth(6f);
         circlePaint.setColor(Color.GREEN);
     }
 
@@ -29,7 +29,7 @@ public class AimOverlay extends View {
         if (!enabled) return;
         float cx = getWidth() / 2f;
         float cy = getHeight() / 2f;
-        float radius = Math.min(getWidth(), getHeight()) * 0.15f;
+        float radius = Math.min(getWidth(), getHeight()) * 0.40f;
         canvas.drawCircle(cx, cy, radius, circlePaint);
         postInvalidateOnAnimation();
     }

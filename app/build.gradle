@@ -1,13 +1,13 @@
 plugins { id 'com.android.application' }
 android {
-    namespace 'com.proxydhuy'
+    namespace 'com.modssensi'
     compileSdk 34
     defaultConfig {
-        applicationId "com.proxydhuy"
+        applicationId "com.modssensi"
         minSdk 26
         targetSdk 34
         versionCode 1
-        versionName "1.0"
+        versionName "2.0"
     }
     buildTypes {
         release {
