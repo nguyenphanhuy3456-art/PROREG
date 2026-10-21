@@ -24,11 +24,13 @@ public class FloatingMenu extends Service {
         wm = (WindowManager) getSystemService(WINDOW_SERVICE);
         int type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
 
+        // Lớp vẽ vòng tròn Aim
         aimOverlay = new AimOverlay(this);
         wm.addView(aimOverlay, new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT,
                 type, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.TRANSLUCENT));
 
+        // 1. Tạo Menu chính
         LinearLayout ll = new LinearLayout(this);
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setBackgroundColor(0xCC000000);
@@ -37,6 +39,7 @@ public class FloatingMenu extends Service {
         TextView tv = new TextView(this);
         tv.setText("PIXLE MODS\nBám Đầu 100%\nSensi: Mượt");
         tv.setTextColor(0xFF00E5FF);
+        tv.setPadding(10, 10, 10, 20); // Vùng chạm rộng hơn để dễ kéo
         ll.addView(tv);
 
         Switch swAim = new Switch(this);
@@ -57,6 +60,7 @@ public class FloatingMenu extends Service {
         wm.addView(ll, mlp);
         menuView = ll;
 
+        // 2. Tạo Nút nổi (Bong bóng)
         TextView bubble = new TextView(this);
         bubble.setText("+"); bubble.setTextSize(30); bubble.setTextColor(Color.WHITE);
         bubble.setGravity(Gravity.CENTER);
@@ -71,8 +75,13 @@ public class FloatingMenu extends Service {
         bubbleView = bubble;
         bubbleView.setVisibility(View.GONE);
 
-        btnHide.setOnClickListener(v -> { ll.setVisibility(View.GONE); bubbleView.setVisibility(View.VISIBLE); });
+        // Sự kiện ẩn menu
+        btnHide.setOnClickListener(v -> { 
+            ll.setVisibility(View.GONE); 
+            bubbleView.setVisibility(View.VISIBLE); 
+        });
 
+        // 3. Logic Kéo thả Nút nổi & Mở lại Menu
         bubble.setOnTouchListener(new View.OnTouchListener() {
             int initialX, initialY; float initialTouchX, initialTouchY; boolean isDragging = false;
             @Override public boolean onTouch(View v, MotionEvent event) {
@@ -89,9 +98,32 @@ public class FloatingMenu extends Service {
                             wm.updateViewLayout(bubbleView, blp);
                         } return true;
                     case MotionEvent.ACTION_UP:
-                        if (!isDragging) { ll.setVisibility(View.VISIBLE); bubbleView.setVisibility(View.GONE); }
+                        // Nếu chỉ chạm (không kéo) thì mở lại menu
+                        if (!isDragging) { 
+                            ll.setVisibility(View.VISIBLE); 
+                            bubbleView.setVisibility(View.GONE); 
+                        }
                         return true;
                 } return false;
+            }
+        });
+
+        // 4. Logic Kéo thả Menu chính (Chạm vào dòng chữ PIXLE MODS để kéo)
+        tv.setOnTouchListener(new View.OnTouchListener() {
+            int initialX, initialY; float initialTouchX, initialTouchY;
+            @Override public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        initialX = mlp.x; initialY = mlp.y;
+                        initialTouchX = event.getRawX(); initialTouchY = event.getRawY();
+                        return true;
+                    case MotionEvent.ACTION_MOVE:
+                        mlp.x = initialX + (int) (event.getRawX() - initialTouchX);
+                        mlp.y = initialY + (int) (event.getRawY() - initialTouchY);
+                        wm.updateViewLayout(menuView, mlp);
+                        return true;
+                }
+                return false;
             }
         });
     }
