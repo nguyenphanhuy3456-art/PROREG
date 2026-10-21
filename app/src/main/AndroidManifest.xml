@@ -1,36 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.aim">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.proxydhuy">
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <application
-        android:allowBackup="true"
-        android:icon="@android:drawable/ic_menu_compass"
-        android:label="AIM Menu"
-        android:theme="@android:style/Theme.Material.NoActionBar">
+    
+    <application android:label="Proxy aim Dhuy" android:theme="@android:style/Theme.Material.NoActionBar">
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <service android:name=".AimVpnService" android:foregroundServiceType="specialUse" android:exported="false">
-            <intent-filter>
-                <action android:name="android.net.VpnService"/>
-            </intent-filter>
+        
+        <service android:name=".FloatingMenu" android:foregroundServiceType="specialUse" android:exported="false"/>
+        
+        <service android:name=".AimService" android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" android:exported="true">
+            <intent-filter><action android:name="android.accessibilityservice.AccessibilityService"/></intent-filter>
+            <meta-data android:name="android.accessibilityservice" android:resource="@xml/aim_config"/>
         </service>
-        <service android:name=".CrosshairAim" android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" android:exported="true">
-            <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService"/>
-            </intent-filter>
-            <meta-data android:name="android.accessibilityservice" android:resource="@xml/crosshair_config"/>
-        </service>
+        
         <service android:name=".AntiReportService" android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" android:exported="true">
-            <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService"/>
-            </intent-filter>
+            <intent-filter><action android:name="android.accessibilityservice.AccessibilityService"/></intent-filter>
             <meta-data android:name="android.accessibilityservice" android:resource="@xml/antireport_config"/>
         </service>
     </application>
