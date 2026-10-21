@@ -1,5 +1,4 @@
-package com.modssensi;
-
+package com.pixlemods;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,23 +13,19 @@ public class AimOverlay extends View {
         super(c);
         circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         circlePaint.setStyle(Paint.Style.STROKE);
-        circlePaint.setStrokeWidth(6f);
+        circlePaint.setStrokeWidth(4f);
         circlePaint.setColor(Color.GREEN);
     }
 
-    public void setEnabled(boolean on) {
-        enabled = on;
-        invalidate();
-    }
+    public void setEnabled(boolean on) { enabled = on; invalidate(); }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
+    @Override protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (!enabled) return;
         float cx = getWidth() / 2f;
         float cy = getHeight() / 2f;
-        float radius = Math.min(getWidth(), getHeight()) * 0.40f;
-        canvas.drawCircle(cx, cy, radius, circlePaint);
+        // Vẽ vòng tròn Aim (bán kính 20%)
+        canvas.drawCircle(cx, cy, Math.min(getWidth(), getHeight()) * 0.20f, circlePaint);
         postInvalidateOnAnimation();
     }
 }
